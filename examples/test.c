@@ -14,6 +14,13 @@ birdie* get_instance_ptr(lua_State* L) {
 int birdie_index(lua_State* L) {
   const char* membername = lua_tostring(L, -1);
   birdie* self = get_instance_ptr(L);
+
+  lua_pushstring(L, "b");
+  lua_gettable(L, -3);
+  int b = lua_tointeger(L, -1);
+  lua_pop(L, 1);
+  printf("b = %d\n", b);
+
   return luaA_struct_push_member_name(L, birdie, membername, self);
 }
 
@@ -44,7 +51,7 @@ int main(int argc, char **argv) {
     "Birdie = {}\n"
     "setmetatable(Birdie, Birdie)\n"
     "function Birdie.__call()\n"
-    "  local self = {}\n"
+    "  local self = {a = 10, b = 20, c = 30}\n"
     "  setmetatable(self, Birdie)\n"
     "  return self\n"
     "end\n"
