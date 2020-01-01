@@ -50,7 +50,8 @@ endif
 
 # Library
 
-all: $(SHARED_LIB) $(STATIC_LIB)
+all: $(SHARED_LIB) $(STATIC_LIB) examples
+
 
 $(SHARED_LIB): $(LAC)
 	$(CC) $^ $(CFLAGS) $(LAC_CFLAGS) $(LAC_CPPFLAGS) $(LDFLAGS) $(LAC_LDFLAGS) $(LAC_LIBS) -shared -o $@  
@@ -66,7 +67,7 @@ examples: $(EXAMPLES_OUT)
 examples/example_%$(EXE_SUFFIX): examples/example_%.c $(LAC)
 	$(CC) $^ $(CFLAGS) $(LAC_CFLAGS) $(LAC_CPPFLAGS) $(LDFLAGS) $(LAC_LDFLAGS) $(LAC_LIBS) -o $@  
 
-examples/test(EXE_SUFFIX): examples/test.c $(LAC)
+examples/test$(EXE_SUFFIX): examples/test.c $(LAC)
 	$(CC) $^ $(CFLAGS) $(LAC_CFLAGS) $(LAC_CPPFLAGS) $(LDFLAGS) $(LAC_LDFLAGS) $(LAC_LIBS) -o $@  
 
 
