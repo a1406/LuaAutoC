@@ -8,7 +8,7 @@ AR?=ar
 LAC=lautoc.c
 LAC_OBJ=lautoc.o
 LAC_CPPFLAGS= -I./include $(LUA_INCLUDE_DIR)
-LAC_CFLAGS= -std=gnu99 -Wall -Werror -Wno-unused -O3 -g
+LAC_CFLAGS= -std=gnu99 -Wall -Werror -Wno-unused -O0 -g
 LAC_LDFLAGS= $(LUA_LIBRARY_DIR)
 LAC_LIBS= $(LUA_LIBRARY)
 
@@ -19,8 +19,8 @@ SHARED_LIB= $(SHARED_LIB_PREFIX)lautoc$(SHARED_LIB_SUFFIX)
 STATIC_LIB= $(STATIC_LIB_PREFIX)lautoc$(STATIC_LIB_SUFFIX)
 
 ifeq ($(findstring Linux,$(PLATFORM)),Linux)
-	LUA_INCLUDE_DIR?= -I/usr/include/lua5.2/
-	LUA_LIBRARY?= -llua5.2
+	LUA_INCLUDE_DIR?= -I/usr/include/lua5.3/
+	LUA_LIBRARY?= -llua5.3
 	LAC_CFLAGS+= -fPIC
 	LAC_LDFLAGS+= -fPIC
 	SHARED_LIB_PREFIX:=lib
@@ -29,8 +29,8 @@ ifeq ($(findstring Linux,$(PLATFORM)),Linux)
 	STATIC_LIB_SUFFIX:=.a
 	EXE_SUFFIX:=
 else ifeq ($(findstring Darwin,$(PLATFORM)),Darwin)
-	LUA_INCLUDE_DIR?= -I/usr/include/lua5.2/
-	LUA_LIBRARY?= -llua5.2
+	LUA_INCLUDE_DIR?= -I/usr/include/lua5.3/
+	LUA_LIBRARY?= -llua5.3
 	LAC_CFLAGS+= -fPIC
 	LAC_LDFLAGS+= -fPIC
 	SHARED_LIB_PREFIX:=lib
