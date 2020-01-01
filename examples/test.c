@@ -31,6 +31,32 @@ int birdie_newindex(lua_State* L) {
   return 0;
 }
 
+static int docall (lua_State *L, int narg, int nres) {
+  int status;
+  int base = lua_gettop(L) - narg;  /* function index */
+  lua_pushcfunction(L, msghandler);  /* push message handler */
+  lua_insert(L, base);  /* put it under function and args */
+  globalL = L;  /* to be available to 'laction' */
+  signal(SIGINT, laction);  /* set C-signal handler */
+  status = lua_pcall(L, narg, nres, base);
+  signal(SIGINT, SIG_DFL); /* reset C-signal handler */
+  lua_remove(L, base);  /* remove message handler from the stack */
+  return status;
+}
+static void l_message (const char *pname, const char *msg) {
+  if (pname) printf("%s: ", pname);
+  printf("%s\n", msg);
+}
+static int report (lua_State *L, int status) {
+  if (status != LUA_OK) {
+    const char *msg = lua_tostring(L, -1);
+    l_message("", msg);
+    lua_pop(L, 1);  /* remove message */
+  }
+  return status;
+}
+
+
 int main(int argc, char **argv) {
   
   test_birdie.name = "MrFlingly";
@@ -46,8 +72,9 @@ int main(int argc, char **argv) {
   
   lua_register(L, "birdie_index", birdie_index);
   lua_register(L, "birdie_newindex", birdie_newindex);
-  
-  luaL_dostring(L, ""
+
+/* (luaL_loadstring(L, str) || lua_pcall(L, 0, LUA_MULTRET, 0)) */
+  luaL_loadstring(L, ""
     "Birdie = {}\n"
     "setmetatable(Birdie, Birdie)\n"
     "function Birdie.__call()\n"
@@ -64,7 +91,9 @@ int main(int argc, char **argv) {
     "bird.num_wings = 3\n"
     "print(bird.num_wings)\n"
     "\n");
-  
+
+  int status = docall(L, 0, LUA_MULTRET);
+  report(L, status);
   luaA_close(L);
   lua_close(L);
   
