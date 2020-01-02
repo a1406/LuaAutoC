@@ -40,7 +40,7 @@ int birdie_newindex(lua_State* L) {
   const char* membername = lua_tostring(L, -2);
 //  birdie* self = get_instance_ptr(L);
   lua_pushstring(L, "cdata");
-  lua_gettable(L, -3);
+  lua_gettable(L, -4);
   birdie* self = lua_touserdata(L, -1);
   lua_pop(L, 1);
   
@@ -122,7 +122,7 @@ int main(int argc, char **argv) {
     "  return self\n"
     "end\n"
     "Birdie.__index = birdie_index\n"
-    "-- Birdie.__newindex = birdie_newindex\n"
+    "Birdie.__newindex = birdie_newindex\n"
     "\n"
     "bird1 = Birdie()\n"
     "bird1.name = \"woshishui111\"\n"
@@ -130,6 +130,7 @@ int main(int argc, char **argv) {
     "bird2 = Birdie()\n"
     "bird2.name = \"woshishui222\"\n"
     "bird2.num_wings = 22222\n"
+    "-- bird2.ttt = 22222\n"	  
 	  
     "print(bird1.name)\n"
     "print(bird1.num_wings)\n"
